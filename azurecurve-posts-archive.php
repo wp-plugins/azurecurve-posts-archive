@@ -2,8 +2,8 @@
 /*
 Plugin Name: azurecurve Posts Archive
 Plugin URI: http://wordpress.azurecurve.co.uk/plugins/posts-archive
-Description: Posts Archive based on Ozh Tweet Archive Theme
-Version: 1.0
+Description: Posts Archive (multi-site compatible) based on Ozh Tweet Archive Theme; archive can be displayed in a widget, post or page.
+Version: 1.0.1
 Author: Ian Grieve
 Author URI: http://wordpress.azurecurve.co.uk
 
@@ -41,8 +41,8 @@ class azurecurve_Posts_Archive extends WP_Widget {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue' ) );
 		
 		// Widget creation function
-		parent::__construct( 'posts_archive',
-							 'Posts Archive',
+		parent::__construct( 'azurecurve_posts_archive',
+							 'azurecurve Posts Archive',
 							 array( 'description' =>
 									'Displays Posts Archive' ) );
 	}
@@ -55,9 +55,7 @@ class azurecurve_Posts_Archive extends WP_Widget {
 	 */
 	public function enqueue() {
 		// Enqueue Styles
-		//if ( apply_filters( 'sidebar_login_include_css', true ) ) {
-			wp_enqueue_style( 'azurecurve-posts-archive', plugins_url( 'style.css', __FILE__ ), '', $this->version );
-		//}
+		wp_enqueue_style( 'azurecurve-posts-archive', plugins_url( 'style.css', __FILE__ ), '', '1.0.0' );
 	}
 
 	// Code to render options form
@@ -94,7 +92,7 @@ class azurecurve_Posts_Archive extends WP_Widget {
 		return $instance;
 	}
 	
-	// Code to render options form// Function to display widget contents
+	// Function to display widget contents
 	function widget ( $args, $instance ) {
 		// Extract members of args array as individual variables
 		extract( $args );
@@ -167,56 +165,56 @@ class azurecurve_Posts_Archive extends WP_Widget {
 add_shortcode( 'posts-archive', 'display_posts_archive' );
 
 function display_posts_archive($atts) {
-			global $wpdb;
-			
-			$where = "WHERE post_type = 'post' AND post_status = 'publish'";
-			$query = "SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, count(ID) as posts FROM $wpdb->posts $where GROUP BY YEAR(post_date), MONTH(post_date) ORDER BY YEAR DESC, MONTH ASC";
-			$_archive = $wpdb->get_results( $query );
+	global $wpdb;
+	
+	$where = "WHERE post_type = 'post' AND post_status = 'publish'";
+	$query = "SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, count(ID) as posts FROM $wpdb->posts $where GROUP BY YEAR(post_date), MONTH(post_date) ORDER BY YEAR DESC, MONTH ASC";
+	$_archive = $wpdb->get_results( $query );
 
-			$last_year  = (int) $_archive[0]->year;
-			$first_year = (int) $_archive[ count( $_archive ) - 1 ]->year;
+	$last_year  = (int) $_archive[0]->year;
+	$first_year = (int) $_archive[ count( $_archive ) - 1 ]->year;
 
-			$archive    = array();
-			$max        = 0;
-			$year_total = array();
-			
-			foreach( $_archive as $data ) {
-				if( !isset( $year_total[ $data->year ] ) ) {
-					$year_total[ $data->year ] = 0;
-				}
-				$archive[ $data->year ][ $data->month ] = $data->posts;
-				$year_total[ $data->year ] += $data->posts;
-				$max = max( $max, $data->posts );
+	$archive    = array();
+	$max        = 0;
+	$year_total = array();
+	
+	foreach( $_archive as $data ) {
+		if( !isset( $year_total[ $data->year ] ) ) {
+			$year_total[ $data->year ] = 0;
+		}
+		$archive[ $data->year ][ $data->month ] = $data->posts;
+		$year_total[ $data->year ] += $data->posts;
+		$max = max( $max, $data->posts );
+	}
+	unset( $_archive );
+
+	for ( $year = $last_year; $year >= $first_year; $year-- ) {
+		echo '<div class="azc_pa_page_archive_year">';
+		echo '<span class="azc_pa_page_archive_year_label">' . $year;
+		if( isset( $year_total[$year] ) ) {
+			echo '<span class="azc_pa_page_archive_year_count">' . $year_total[$year] . ' posts</span>';
+		}
+		echo '</span>';
+		echo '<ol class="azc_pa_page_ordered_list">';
+		for ( $month = 1; $month <= 12; $month++ ) {
+			$num = isset( $archive[ $year ][ $month ] ) ? $archive[ $year ][ $month ] : 0;
+			$empty = $num ? 'azc_pa_page_not_empty' : 'azc_pa_page_empty';
+			echo "<li class='$empty'>";
+			$height = 100 - max( floor( $num / $max * 100 ), 20 );
+			if( $num ) {
+				$url = get_month_link( $year, $month );
+				$m = str_pad( $month, 2, "0", STR_PAD_LEFT);
+				echo "<a href='$url' title='$m/$year : $num posts'><span class='azc_pa_page_bar_wrap'><span class='azc_pa_page_bar' style='height:$height%'></span></span>";
+				echo "<span class='azc_pa_page_label'>" . $m . "</span>";
+				echo "</a>";
 			}
-			unset( $_archive );
-
-			for ( $year = $last_year; $year >= $first_year; $year-- ) {
-				echo '<div class="azc_pa_page_archive_year">';
-				echo '<span class="azc_pa_page_archive_year_label">' . $year;
-				if( isset( $year_total[$year] ) ) {
-					echo '<span class="azc_pa_page_archive_year_count">' . $year_total[$year] . ' posts</span>';
-				}
-				echo '</span>';
-				echo '<ol class="azc_pa_page_ordered_list">';
-				for ( $month = 1; $month <= 12; $month++ ) {
-					$num = isset( $archive[ $year ][ $month ] ) ? $archive[ $year ][ $month ] : 0;
-					$empty = $num ? 'azc_pa_page_not_empty' : 'azc_pa_page_empty';
-					echo "<li class='$empty'>";
-					$height = 100 - max( floor( $num / $max * 100 ), 20 );
-					if( $num ) {
-						$url = get_month_link( $year, $month );
-						$m = str_pad( $month, 2, "0", STR_PAD_LEFT);
-						echo "<a href='$url' title='$m/$year : $num posts'><span class='azc_pa_page_bar_wrap'><span class='azc_pa_page_bar' style='height:$height%'></span></span>";
-						echo "<span class='azc_pa_page_label'>" . $m . "</span>";
-						echo "</a>";
-					}
-					echo '</li>';
-				}
-				echo '</ol>';
-				echo "</div>";
-			}
-			// Reset post data query
-			wp_reset_query();
+			echo '</li>';
+		}
+		echo '</ol>';
+		echo "</div>";
+	}
+	// Reset post data query
+	wp_reset_query();
 }
 
 ?>
