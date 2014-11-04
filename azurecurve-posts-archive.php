@@ -3,7 +3,7 @@
 Plugin Name: azurecurve Posts Archive
 Plugin URI: http://wordpress.azurecurve.co.uk/plugins/posts-archive
 Description: Posts Archive (multi-site compatible) based on Ozh Tweet Archive Theme; archive can be displayed in a widget, post or page.
-Version: 1.0.1
+Version: 1.0.2
 Author: Ian Grieve
 Author URI: http://wordpress.azurecurve.co.uk
 
