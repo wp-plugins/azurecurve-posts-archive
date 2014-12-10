@@ -2,10 +2,15 @@
 /*
 Plugin Name: azurecurve Posts Archive
 Plugin URI: http://wordpress.azurecurve.co.uk/plugins/posts-archive
+
 Description: Posts Archive (multi-site compatible) based on Ozh Tweet Archive Theme; archive can be displayed in a widget, post or page.
-Version: 1.0.2
+Version: 1.0.3
+
 Author: Ian Grieve
 Author URI: http://wordpress.azurecurve.co.uk
+
+Text Domain: azurecurve-posts-archive
+Domain Path: /languages
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -215,6 +220,17 @@ function display_posts_archive($atts) {
 	}
 	// Reset post data query
 	wp_reset_query();
+
+
+// Add actions
+add_action('plugins_loaded', 'azc_pa_load_plugin_textdomain');
+
+function azc_pa_load_plugin_textdomain(){
+	
+	$loaded = load_plugin_textdomain( 'azurecurve-posts-archive', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	//if ($loaded){ echo 'true'; }else{ echo 'false'; }
+}
+
 }
 
 ?>

@@ -5,7 +5,7 @@ Author URI: http://wordpress.azurecurve.co.uk/
 Plugin URI: http://wordpress.azurecurve.co.uk/plugins/posts-archive/
 Tags: posts, archive, page, widget
 Requires at least: 3.3
-Tested up to: 4.0.0
+Tested up to: 4.0.1
 Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -14,6 +14,8 @@ Posts Archive (multi-site compatible) based on Ozh Tweet Archive Theme; archive 
 
 == Description ==
 The Posts Archive plugin is based on the <a href='http://planetozh.com/blog/my-projects/ozh-tweet-archive-theme-for-wordpress/' rel='nofollow'>Ozh Tweet Archive - a theme for Wordpress</a>. The tweet archive was extracted, enhanced and turned into this plugin which lets the posts archive to be displayed in a page or in a widget.
+
+This plugin supports language translations. If you want to translate this plugin please sent the .po and .mo files to wordpress.translations@azurecurve.co.uk for inclusion in the next version (full credit will be given). The .pot fie is in the languages folder of the plugin and can also be downloaded from the plugin page on http://wordpress.azurecurve.co.uk.
 
 == Installation ==
 To install the plugin copy the <em>azurcurve-posts-archive</em> folder into your plug-in directory and activate it.
@@ -37,4 +39,5 @@ Changes and feature additions for the Posts Archive plugin:
 3. Widget in sidebar
 
 == Frequently Asked Questions ==
-* No questions asked as of yet 
+= Can I translate this plugin? =
+Yes, the .pot fie is in the plugin's languages folder and can also be downloaded from the plugin page on http://wordpress.azurecurve.co.uk; if you do translate this plugin please sent the .po and .mo files to wordpress.translations@azurecurve.co.uk for inclusion in the next version (full credit will be given).
