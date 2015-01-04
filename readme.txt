@@ -5,7 +5,7 @@ Author URI: http://wordpress.azurecurve.co.uk/
 Plugin URI: http://wordpress.azurecurve.co.uk/plugins/posts-archive/
 Tags: posts, archive, page, widget
 Requires at least: 3.3
-Tested up to: 4.0.1
+Tested up to: 4.1.0
 Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -26,6 +26,8 @@ As mentioned, above there are two functions available:
 
 == Changelog ==
 Changes and feature additions for the Posts Archive plugin:
+= 1.0.2 =
+* Multilanguage support added
 = 1.0.1 =
 * Multi-site compatible
 * Set default widget title on plugin activation
